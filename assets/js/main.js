@@ -20,11 +20,11 @@ $(function() {
     // Style for regions baselayer
     function style() {
     return {
-        fillColor: '#E5E5E3',
+        fillColor: '#ffffe6',
         weight: 1,
         opacity: 1,
-        color: '#000000',
-        dashArray: '4',
+        color: '#808080',
+        dashArray: '0',
         fillOpacity: 0.7
         };
     }
@@ -91,18 +91,18 @@ $(function() {
 
                 // TODO: Change circles color
                 return L.circleMarker(latlng, {
-                    fillColor: "#F0A909",
-                    color: "#614504",
+                    fillColor: "#800080",
+                    color: "#b300b3",
                     weight: 1,
                     fillOpacity: 0.6
                 }).on({
                     mouseover: function() {
                         this.openPopup();
-                        this.setStyle({color: 'yellow'});
+                        this.setStyle({color: '#ff00ff'});
                     },
                     mouseout: function() {
                         this.closePopup();
-                        this.setStyle({color: '#614504'});
+                        this.setStyle({color: '#b300b3'});
 
                     }
 
@@ -117,12 +117,10 @@ $(function() {
             
             let props = layer.feature.properties;
             let radius = calcPropRadius(props[timestamps]);
-            let popupContent = "<b>" + String(props[timestamps]) +
-            " nouveaux cas</b><br>" +
+            let popupContent = "<b>" + (String(props[timestamps]) * 10000) +
+            " personnes</b><br>" +
             "<i>" + props.r_nom + "<br>" +
-            "</i>" +
-            timestamps + "</i>" +
-            " janvier 2022";
+            "</i>";
             layer.setRadius(radius);
             layer.bindPopup(popupContent, {
                 offset: new L.Point(0,-radius),
@@ -162,7 +160,7 @@ $(function() {
             // Prevent mousedown event from propagating to the map
             L.DomEvent.disableClickPropagation(legendContainer);
 
-            $(legendContainer).append("<h3 id='legendTitle'>Nouveaux cas</h3>");
+            $(legendContainer).append("<h3 id='legendTitle'>Population (En 10 000)</h3>");
 
             for (let i = 0; i<= classes.length - 1; i++) {
                 legendCircle = L.DomUtil.create('div', 'legendCircle');
@@ -175,7 +173,7 @@ $(function() {
                     "height: " + (currentRadius * 2) + "px; " +
                     "margin-left: " + margin + "px");
 
-                $(legendCircle).append("<span class='legendValue'>" + classes[i] + ' <b><i>cas</i></b>' +"</span>");
+                $(legendCircle).append("<span class='legendValue'>" + classes[i] + ' <b><i></i></b>' +"</span>");
                 $(symbolsContainer).append(legendCircle);
                 lastRadius = currentRadius;
             }
@@ -205,7 +203,7 @@ $(function() {
                 'step': 1,
                 'value': String(timestamps[0])})
                 .on('input change', function() {
-                    const month = " janvier 2022";
+                    const month = " RGPH ";
                     updatePropSymbols($(this).val().toString());
                     $(".temporal-legend").text(this.value + month);
                 });
@@ -220,7 +218,7 @@ $(function() {
         temporalLegend.onAdd = function() {
             let output = L.DomUtil.create('output', 'temporal-legend');
             $(output).text(startTimestamp);
-            $(output).append(" janvier 2022");
+            $(output).append(" RGPH ");
             return output;
     }
 
@@ -238,7 +236,7 @@ $(function() {
 
         // method that we will use to update the control based on feature properties passed
         info.update = function () {
-            this._div.innerHTML = '<h4>Carte covid, Maroc</h3>' + '<br>' + 'Passer la souris sur un symbole';
+            this._div.innerHTML = '<h4>Carte Population des régions, Maroc</h3>' + '<br>' + 'Merci de mettre le curseur sur un symbole';
         };
 
         info.addTo(map);
